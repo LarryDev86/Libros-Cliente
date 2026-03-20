@@ -1,0 +1,11 @@
+.label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.fondo {
+    -fx-background-image: url("../images/LibroRetos.jpg");
+    -fx-background-size: stretch;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
