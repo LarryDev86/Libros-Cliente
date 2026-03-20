@@ -36,6 +36,10 @@ public class LoginView {
         txtPassword = new PasswordField();
         txtPassword.setPrefWidth(280);
         btnEntrar = new Button("Entrar");
+        btnEntrar.disableProperty().bind(
+                txtUsuer.textProperty().isEmpty()
+                        .or(txtPassword.textProperty().isEmpty())
+        );
         lblMensaje = new Label();
         VBox root = new VBox(14,lblUser,txtUsuer,
                 lblPassword,txtPassword
