@@ -9,3 +9,26 @@
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
 }
+
+.menu-usuario {
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+    -fx-padding: 2 6 2 6;
+    -fx-alignment: center;
+}
+
+.menu-usuario > .label {
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.menu-usuario .arrow {
+    -fx-padding: 0 2 0 2;
+}
+
+.menu-item .label {
+    -fx-font-size: 11px;
+    -fx-font-weight: normal;
+}

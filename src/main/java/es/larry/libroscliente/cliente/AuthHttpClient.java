@@ -3,6 +3,8 @@ package es.larry.libroscliente.cliente;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.larry.libroscliente.dto.RequestDto;
 import es.larry.libroscliente.dto.ResponseDto;
+import es.larry.libroscliente.utils.JwtUtils;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -40,19 +42,15 @@ public class AuthHttpClient {
             if (response.statusCode() == 200) {
                 ResponseDto responseDto =
                         mapper.readValue(response.body(), ResponseDto.class);
-
                 String token = responseDto.getToken();
-            return token;
-                /*
                 // Comprobamos por consola la el contenido del token
                 System.out.println("HEADER:");
                 System.out.println(JwtUtils.decodeHeader(token));
                 System.out.println("PAYLOAD:");
                 System.out.println(JwtUtils.decodePayload(token));
-                */
+            return token;
             }
             return null;
-
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error en la autenticación", e);
         }

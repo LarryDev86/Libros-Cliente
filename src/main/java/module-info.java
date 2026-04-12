@@ -6,6 +6,7 @@ module es.larry.libroscliente {
     requires com.fasterxml.jackson.databind;
     requires java.sql;
     requires jdk.compiler;
+    requires javafx.base;
 
     opens es.larry.libroscliente to javafx.fxml;
     opens es.larry.libroscliente.dto to com.fasterxml.jackson.databind;

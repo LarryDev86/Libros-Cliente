@@ -1,0 +1,52 @@
+.titulo-seccion {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2d3d;
+}
+
+.tabla-libros {
+    -fx-background-color: white;
+    -fx-border-color: #d9d9d9;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+}
+
+.tabla-libros .column-header-background {
+    -fx-background-color: #f4f4f4;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.tabla-libros .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #e5e5e5 transparent;
+}
+
+.tabla-libros .column-header .label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 10 8 10 8;
+}
+
+.tabla-libros .table-row-cell {
+    -fx-background-color: white;
+}
+
+.tabla-libros .table-row-cell:odd {
+    -fx-background-color: #fafafa;
+}
+
+.tabla-libros .table-row-cell:hover {
+    -fx-background-color: #eef6ff;
+}
+
+.tabla-libros .table-row-cell:selected {
+    -fx-background-color: #dbeafe;
+}
+
+.tabla-libros .table-cell {
+    -fx-border-color: transparent;
+    -fx-padding: 10 8 10 8;
+    -fx-font-size: 13px;
+}

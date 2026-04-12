@@ -1,8 +1,7 @@
 package es.larry.libroscliente.controller;
 
 import es.larry.libroscliente.sesion.Sesion;
-import es.larry.libroscliente.view.HomeView;
-import es.larry.libroscliente.view.LogoutView;
+import es.larry.libroscliente.view.*;
 
 // Clase donde implementa la ventana de logout ( sesion del del usuario )
 public class LogoutController {
@@ -18,7 +17,10 @@ public class LogoutController {
 
     // Con este bton estamos entrando dentro del metodo logout y con ellos enviandolo a la pantalla home
     private void initEvents(){
-        logoutView.getLogoutButton().setOnAction(e -> logout());
+        logoutView.getMenuLogOut().setOnAction(e -> logout());
+        logoutView.getMenuListarLibros().setOnAction(e -> listarLibros());
+        logoutView.getMenuDatosUser().setOnAction(e -> listarUsers());
+        logoutView.getMenuModificar().setOnAction(e -> modificarUser());
     }
 
     private void logout(){
@@ -28,5 +30,23 @@ public class LogoutController {
         Sesion.cleanToken();
         //Volvemos a la pantalla inicial
         homeView.show();
+    }
+    private void listarLibros(){
+        ListaLibrosController listarLibros = new ListaLibrosController(
+                new ListaLibrosView()
+        );
+    }
+
+    private void listarUsers(){
+        ListaUsersController lista = new ListaUsersController(
+                new ListarUserView()
+        );
+
+    }
+
+    private void modificarUser(){
+        ModificarView modi = new ModificarView();
+        new ModificarController(modi);
+        modi.show();
     }
 }

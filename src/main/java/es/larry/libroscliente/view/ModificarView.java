@@ -13,22 +13,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-// Clase que define como sera la pantalla login
-public class LoginView {
-
+public class ModificarView {
     private Stage stage;
     private TextField txtUsuer;
     private PasswordField txtPassword;
     private Button btnEntrar;
-    private Button btnRegistro;
-    private Button btnBaja;
     private Label lblMensaje;
 
     // Aqui definimos como será la ventana de login del usuario
-    public LoginView() {
+    public ModificarView() {
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Login / Registrarte");
+        stage.setTitle("Modificar campos");
         stage.setWidth(400);
         stage.setHeight(350);
         Label lblUser = new Label("Usuario: ");
@@ -39,25 +35,16 @@ public class LoginView {
         lblPassword.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         txtPassword = new PasswordField();
         txtPassword.setPrefWidth(280);
-        btnEntrar = new Button("Entrar");
-        btnBaja = new Button("Dar de Baja");
-        btnRegistro = new Button("Registrate");
-        //Definimos mismo tamaña para los 3 botones
-        int ancho = 100;
-        btnEntrar.setPrefWidth(ancho);
-        btnRegistro.setPrefWidth(ancho);
-        btnBaja.setPrefWidth(ancho);
+        btnEntrar = new Button("Modificar");
         // Opcion para desactivar el boton, hasta no rellenar los dos campos
         BooleanBinding camposVacios = txtUsuer.textProperty().isEmpty()
                 .or(txtPassword.textProperty().isEmpty());
         btnEntrar.disableProperty().bind(camposVacios);
-        btnRegistro.disableProperty().bind(camposVacios);
-        btnBaja.disableProperty().bind(camposVacios);
-        lblMensaje = new Label();
+        lblMensaje = new Label(); //Esto habra que adaptarlo a los mensajes que debe devolver
         lblMensaje.setStyle("-fx-font-size: 16px; -fx-text-fill: red;");
         VBox root = new VBox(14,lblUser,txtUsuer,
                 lblPassword,txtPassword
-                ,btnRegistro,btnEntrar,btnBaja,lblMensaje);
+                ,btnEntrar,lblMensaje);
         root.setPadding(new Insets(25));
         root.setAlignment(Pos.CENTER_LEFT);
         root.setStyle("-fx-background-color: #f4f4f4;");
@@ -69,34 +56,25 @@ public class LoginView {
     }
 
     public void show(){
-        stage.showAndWait();
+        stage.show();
     }
-
     public Stage getStage() {
         return stage;
     }
 
-    public Label getLblMensaje() {
-        return lblMensaje;
-    }
-
-    public Button getBtnEntrar() {
-        return btnEntrar;
-    }
-
-    public Button getBtnRegistro() {
-        return btnRegistro;
-    }
-
-    public Button getBtnBaja() {
-        return btnBaja;
+    public TextField getTxtUsuer() {
+        return txtUsuer;
     }
 
     public PasswordField getTxtPassword() {
         return txtPassword;
     }
 
-    public TextField getTxtUsuer() {
-        return txtUsuer;
+    public Button getBtnEntrar() {
+        return btnEntrar;
+    }
+
+    public Label getLblMensaje() {
+        return lblMensaje;
     }
 }

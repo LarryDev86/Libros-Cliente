@@ -19,4 +19,16 @@ public class UIUtils {
                 new Image(UIUtils.class.getResourceAsStream("/images/Logo.jpg"))
         );
     }
+
+    public static void setStyleMenu(Scene scene){
+        scene.getStylesheets().add(
+                UIUtils.class.getResource("/css/stylo.css").toExternalForm()
+        );
+    }
+    public static void setStyleTablaLibros(Scene scene){
+        scene.getStylesheets().add(
+                UIUtils.class.getResource("/css/StyloTablaLibros.css").toExternalForm()
+        );
+    }
+
 }

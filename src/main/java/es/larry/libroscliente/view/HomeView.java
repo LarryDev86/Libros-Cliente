@@ -19,13 +19,12 @@ public class HomeView {
         this.stage = stage;
         root = new VBox();
         root.getStyleClass().add("fondo");
-        loginButton = new Button("Login user");
+        loginButton = new Button("Login / Registrarte");
         HBox topBar = new HBox(loginButton);
         topBar.setAlignment(Pos.CENTER_RIGHT);
         topBar.setPadding(new Insets(20));
         root.getChildren().add(topBar);
-
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root, 700, 500);
         UIUtils.applyMainStyle(scene);
         UIUtils.setAppIcon(stage);
 
