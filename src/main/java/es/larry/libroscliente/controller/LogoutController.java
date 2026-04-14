@@ -21,6 +21,7 @@ public class LogoutController {
         logoutView.getMenuListarLibros().setOnAction(e -> listarLibros());
         logoutView.getMenuDatosUser().setOnAction(e -> listarUsers());
         logoutView.getMenuModificar().setOnAction(e -> modificarUser());
+        logoutView.getMenuRanking().setOnAction(e -> rankingUser());
     }
 
     private void logout(){
@@ -41,12 +42,16 @@ public class LogoutController {
         ListaUsersController lista = new ListaUsersController(
                 new ListarUserView()
         );
-
     }
 
     private void modificarUser(){
         ModificarView modi = new ModificarView();
         new ModificarController(modi);
         modi.show();
+    }
+    private void rankingUser(){
+        RankingController rk = new RankingController(
+                new RankingView()
+        );
     }
 }
