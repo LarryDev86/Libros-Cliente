@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 public class ModificarView {
     private Stage stage;
     private TextField txtUsuer;
+    private TextField txtNombreCompleto;
+    private TextField txtEmail;
     private PasswordField txtPassword;
     private Button btnEntrar;
     private Label lblMensaje;
@@ -25,12 +27,20 @@ public class ModificarView {
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Modificar campos");
-        stage.setWidth(400);
-        stage.setHeight(350);
+        stage.setWidth(500);
+        stage.setHeight(500);
         Label lblUser = new Label("Usuario: ");
         lblUser.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         txtUsuer = new TextField();
         txtUsuer.setPrefWidth(280);
+        Label lblNombreCompleto = new Label("Nombre Completo: ");
+        lblNombreCompleto.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        txtNombreCompleto = new TextField();
+        txtNombreCompleto.setPrefWidth(280);
+        Label lblEmail = new Label("Email: ");
+        lblEmail.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        txtEmail = new TextField();
+        txtEmail.setPrefWidth(280);
         Label lblPassword = new Label("Contraseña:");
         lblPassword.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         txtPassword = new PasswordField();
@@ -42,7 +52,7 @@ public class ModificarView {
         btnEntrar.disableProperty().bind(camposVacios);
         lblMensaje = new Label(); //Esto habra que adaptarlo a los mensajes que debe devolver
         lblMensaje.setStyle("-fx-font-size: 16px; -fx-text-fill: red;");
-        VBox root = new VBox(14,lblUser,txtUsuer,
+        VBox root = new VBox(14,lblUser,txtUsuer,lblNombreCompleto,txtNombreCompleto,lblEmail,txtEmail,
                 lblPassword,txtPassword
                 ,btnEntrar,lblMensaje);
         root.setPadding(new Insets(25));
@@ -64,6 +74,14 @@ public class ModificarView {
 
     public TextField getTxtUsuer() {
         return txtUsuer;
+    }
+
+    public TextField getTxtNombreCompleto() {
+        return txtNombreCompleto;
+    }
+
+    public TextField getTxtEmail() {
+        return txtEmail;
     }
 
     public PasswordField getTxtPassword() {

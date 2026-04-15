@@ -2,7 +2,10 @@ package es.larry.libroscliente.cliente;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.larry.libroscliente.dto.RequestDto;
+import es.larry.libroscliente.dto.RequestDtoRegistro;
 import es.larry.libroscliente.dto.ResponseDto;
+import es.larry.libroscliente.dto.Usuario;
+import es.larry.libroscliente.sesion.Sesion;
 import es.larry.libroscliente.utils.JwtUtils;
 
 import java.io.IOException;
@@ -16,6 +19,9 @@ public class AuthHttpClient {
 
     // Cambiar esta URL por la que apunte en el servidor
     private static final String LOGIN_URL = "http://localhost:8080/auth/login";
+    private static final String REGISTRO_URL = "http://localhost:8080/auth/register";
+    private static final String MODIFICAR_URL = "http://localhost:8080/api/usuarios/user";
+    private static final String LISTAR_URL = "http://localhost:8080/api/usuarios/user";
     private HttpClient client;
     private ObjectMapper mapper;
 
@@ -54,5 +60,86 @@ public class AuthHttpClient {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error en la autenticación", e);
         }
+    }
+
+    public String registroUSer(String usuario, String nombreCompleto , String email , String password){
+        try {
+            RequestDtoRegistro requestDtoRegistro = new RequestDtoRegistro(usuario,nombreCompleto,email,password);
+            String json = mapper.writeValueAsString(requestDtoRegistro);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(REGISTRO_URL))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+            HttpResponse<String> response = client.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+            if (response.statusCode() == 200) {
+                ResponseDto responseDto =
+                        mapper.readValue(response.body(), ResponseDto.class);
+                String token = responseDto.getToken();
+                // Comprobamos por consola la el contenido del token
+                System.out.println("HEADER:");
+                System.out.println(JwtUtils.decodeHeader(token));
+                System.out.println("PAYLOAD:");
+                System.out.println(JwtUtils.decodePayload(token));
+                return token;
+            }
+            return null;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error en la autenticación", e);
+        }
+    }
+
+    public int modificarUSer(String usuario, String nombreCompleto , String email , String password){
+
+        int respuesta = 0;
+
+        try {
+            String token = Sesion.getToken();
+            RequestDtoRegistro requestDtoRegistro = new RequestDtoRegistro(usuario,nombreCompleto,email,password);
+            String json = mapper.writeValueAsString(requestDtoRegistro);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(MODIFICAR_URL))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + token)
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+            HttpResponse<String> response = client.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+
+        respuesta =  response.statusCode();
+
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error en la autenticación", e);
+        }
+        return respuesta;
+    }
+
+    public Usuario datosUsuario(){
+        Usuario usuarioRespuesta = null;
+        try {
+            String token = Sesion.getToken();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(LISTAR_URL))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + token)
+                    .GET()
+                    .build();
+            HttpResponse<String> response = client.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+            if (response.statusCode() == 200) {
+                usuarioRespuesta = mapper.readValue(response.body(), Usuario.class);
+            }
+
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error en la autenticación", e);
+        }
+        return usuarioRespuesta;
     }
 }

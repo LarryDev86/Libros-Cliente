@@ -1,20 +1,17 @@
 package es.larry.libroscliente.dto;
 
-public class Usuario {
+public class RequestDtoRegistro {
 
     private String usuario;
     private String nombreCompleto;
     private String email;
-    private int puntos;
+    private String password;
 
-    public Usuario() {
-    }
-
-    public Usuario(String usuario, String nombreCompleto, String email, int puntos) {
+    public RequestDtoRegistro(String usuario, String nombreCompleto, String email, String password) {
         this.usuario = usuario;
         this.nombreCompleto = nombreCompleto;
         this.email = email;
-        this.puntos = puntos;
+        this.password = password;
     }
 
     public String getUsuario() {
@@ -41,11 +38,11 @@ public class Usuario {
         this.email = email;
     }
 
-    public int getPuntos() {
-        return puntos;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPuntos(int puntos) {
-        this.puntos = puntos;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

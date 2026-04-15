@@ -13,14 +13,18 @@ import javafx.stage.Stage;
 public class HomeView {
     private VBox root;
     private Button loginButton;
+    private Button btnregistro;
     private Stage stage;
 
     public HomeView(Stage stage) {
         this.stage = stage;
         root = new VBox();
         root.getStyleClass().add("fondo");
-        loginButton = new Button("Login / Registrarte");
-        HBox topBar = new HBox(loginButton);
+        loginButton = new Button("Login");
+        btnregistro = new Button("Registro");
+        btnregistro.setPrefWidth(100);
+        loginButton.setPrefWidth(100);
+        HBox topBar = new HBox(5,btnregistro,loginButton);
         topBar.setAlignment(Pos.CENTER_RIGHT);
         topBar.setPadding(new Insets(20));
         root.getChildren().add(topBar);
@@ -33,6 +37,10 @@ public class HomeView {
     }
     public void show(){
         stage.show();
+    }
+
+    public Button getBtnregistro() {
+        return btnregistro;
     }
 
     public Stage getStage() {

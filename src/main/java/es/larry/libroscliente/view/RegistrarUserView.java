@@ -13,47 +13,53 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-// Clase que define como sera la pantalla login
-public class LoginView {
-
+public class RegistrarUserView {
     private Stage stage;
     private TextField txtUsuer;
+    private TextField txtNombreCompleto;
+    private TextField txtEmail;
     private PasswordField txtPassword;
-    private Button btnEntrar;
-    private Button btnBaja;
+    private Button btnRegistro;
     private Label lblMensaje;
 
     // Aqui definimos como será la ventana de login del usuario
-    public LoginView() {
+    public RegistrarUserView() {
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Login / Registrarte");
-        stage.setWidth(400);
-        stage.setHeight(350);
+        stage.setTitle("Registrarte");
+        stage.setWidth(500);
+        stage.setHeight(500);
         Label lblUser = new Label("Usuario: ");
         lblUser.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         txtUsuer = new TextField();
         txtUsuer.setPrefWidth(280);
+        //Nombre completo
+        Label lblNombreCompleto = new Label("Nombre completo: ");
+        lblNombreCompleto.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        txtNombreCompleto = new TextField();
+        txtNombreCompleto.setPrefWidth(280);
+        //Email
+        Label lblEmail = new Label("Email: ");
+        lblEmail.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        txtEmail = new TextField();
+        txtEmail.setPrefWidth(280);
         Label lblPassword = new Label("Contraseña:");
         lblPassword.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         txtPassword = new PasswordField();
         txtPassword.setPrefWidth(280);
-        btnEntrar = new Button("Entrar");
-        btnBaja = new Button("Dar de Baja");
+        btnRegistro = new Button("Registrate");
         //Definimos mismo tamaña para los 3 botones
         int ancho = 100;
-        btnEntrar.setPrefWidth(ancho);
-        btnBaja.setPrefWidth(ancho);
+        btnRegistro.setPrefWidth(ancho);
         // Opcion para desactivar el boton, hasta no rellenar los dos campos
         BooleanBinding camposVacios = txtUsuer.textProperty().isEmpty()
                 .or(txtPassword.textProperty().isEmpty());
-        btnEntrar.disableProperty().bind(camposVacios);
-        btnBaja.disableProperty().bind(camposVacios);
+        btnRegistro.disableProperty().bind(camposVacios);
         lblMensaje = new Label();
         lblMensaje.setStyle("-fx-font-size: 16px; -fx-text-fill: red;");
-        VBox root = new VBox(14,lblUser,txtUsuer,
+        VBox root = new VBox(14,lblUser,txtUsuer,lblNombreCompleto,txtNombreCompleto,lblEmail,txtEmail,
                 lblPassword,txtPassword
-                ,btnEntrar,btnBaja,lblMensaje);
+                ,btnRegistro,lblMensaje);
         root.setPadding(new Insets(25));
         root.setAlignment(Pos.CENTER_LEFT);
         root.setStyle("-fx-background-color: #f4f4f4;");
@@ -76,12 +82,16 @@ public class LoginView {
         return lblMensaje;
     }
 
-    public Button getBtnEntrar() {
-        return btnEntrar;
+    public TextField getTxtNombreCompleto() {
+        return txtNombreCompleto;
     }
 
-    public Button getBtnBaja() {
-        return btnBaja;
+    public TextField getTxtEmail() {
+        return txtEmail;
+    }
+
+    public Button getBtnRegistro() {
+        return btnRegistro;
     }
 
     public PasswordField getTxtPassword() {
@@ -91,4 +101,5 @@ public class LoginView {
     public TextField getTxtUsuer() {
         return txtUsuer;
     }
+
 }

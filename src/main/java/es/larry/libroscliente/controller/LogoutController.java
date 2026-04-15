@@ -8,10 +8,11 @@ public class LogoutController {
 
     private LogoutView logoutView;
     private HomeView homeView;
-
-    public LogoutController(LogoutView logoutView, HomeView homeView) {
+    private String token;
+    public LogoutController(LogoutView logoutView, HomeView homeView, String token ) {
         this.logoutView = logoutView;
         this.homeView = homeView;
+        this.token = token;
         initEvents();
     }
 
@@ -46,7 +47,7 @@ public class LogoutController {
 
     private void modificarUser(){
         ModificarView modi = new ModificarView();
-        new ModificarController(modi);
+        new ModificarController(modi,token);
         modi.show();
     }
     private void rankingUser(){

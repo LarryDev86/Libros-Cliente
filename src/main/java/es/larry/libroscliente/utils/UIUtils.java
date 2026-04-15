@@ -30,5 +30,4 @@ public class UIUtils {
                 UIUtils.class.getResource("/css/StyloTablaLibros.css").toExternalForm()
         );
     }
-
 }

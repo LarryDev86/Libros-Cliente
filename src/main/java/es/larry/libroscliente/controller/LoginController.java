@@ -40,7 +40,7 @@ public class LoginController {
                 loginView.getStage().close();
                 LogoutView lg = new LogoutView();
                 lg.setRol(nombre);
-                new LogoutController(lg,homeView);
+                new LogoutController(lg,homeView,token);
                 lg.show();
             } else {
                 loginView.getLblMensaje().setText("Credenciales incorrectas");

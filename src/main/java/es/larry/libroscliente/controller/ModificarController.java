@@ -1,16 +1,21 @@
 package es.larry.libroscliente.controller;
 
 import es.larry.libroscliente.service.LoginService;
+import es.larry.libroscliente.sesion.Sesion;
 import es.larry.libroscliente.view.ModificarView;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 public class ModificarController {
 
     private ModificarView modificarView;
     private LoginService service;
+    private String token;
 
-    public ModificarController(ModificarView modificarView) {
+    public ModificarController(ModificarView modificarView,String token) {
         this.modificarView = modificarView;
         this.service = new LoginService();
+        this.token = token;
         initEvents();
     }
     // Accion cuando pulsamos el boton de logout invoca el metodo login y se ejecuta su contenido.
@@ -18,30 +23,28 @@ public class ModificarController {
         modificarView.getBtnEntrar().setOnAction(e -> login());
     }
     private void login(){
-        /*
-        String nombre = loginView.getTxtUsuer().getText();
-        String password = loginView.getTxtPassword().getText();
+        //Con esto crearemos un nuevo usuario
+        String usuario = modificarView.getTxtUsuer().getText();
+        String nombreCompleto = modificarView.getTxtNombreCompleto().getText();
+        String email = modificarView.getTxtEmail().getText();
+        String password = modificarView.getTxtPassword().getText();
 
         try {
-            String token = service.login(nombre, password);
-            if (token != null && !token.isBlank()) {
-                //Guardamos el token en memoria
-                Sesion.setToken(token);
-                //Aqui cerramos las dos ventanas.
-                homeView.getStage().close();                       REPASAR BIEN Y ADAPTAR
-                loginView.getStage().close();                       PORQUE ESTE NO APUNTA A UPDATE
-                LogoutView lg = new LogoutView();                   APUNTA A COMPROBAR QUE EXISTA UN USUARIO EN BBDD
-                lg.setRol(nombre);
-                new LogoutController(lg,homeView);
-                lg.show();
+            int status = service.modificarUSer(usuario,nombreCompleto,email,password);
+
+            if (status == 200) {
+                modificarView.getLblMensaje().setText("Modificacion correcta");
+                modificarView.getLblMensaje().setStyle("-fx-text-fill: green;");
+                //Mensaje con temporizador
+                PauseTransition pausa = new PauseTransition(Duration.seconds(2));
+                pausa.setOnFinished(event -> modificarView.getStage().close());
+                pausa.play();
             } else {
-                loginView.getLblMensaje().setText("Credenciales incorrectas");
+                modificarView.getLblMensaje().setText("Credenciales incorrectas");
             }
 
         } catch (Exception e) {
-            loginView.getLblMensaje().setText("Error al conectar con el servidor");
+            modificarView.getLblMensaje().setText("Error al conectar con el servidor");
         }
-
-         */
     }
 }

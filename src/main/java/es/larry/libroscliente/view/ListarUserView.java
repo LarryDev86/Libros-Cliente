@@ -1,5 +1,6 @@
 package es.larry.libroscliente.view;
 
+import es.larry.libroscliente.dto.RequestDtoRegistro;
 import es.larry.libroscliente.dto.Usuario;
 import es.larry.libroscliente.utils.UIUtils;
 import javafx.geometry.Insets;
@@ -72,9 +73,9 @@ public class ListarUserView {
         tablaUsuarios.getStyleClass().add("tabla-libros");
         tablaUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
-        colId = new TableColumn<>("ID");
-        colNombre = new TableColumn<>("Nombre");
-        colRol = new TableColumn<>("Rol");
+        colId = new TableColumn<>("Usuario");
+        colNombre = new TableColumn<>("Nombre completo");
+        colRol = new TableColumn<>("Email");
         colPuntos = new TableColumn<>("Puntos");
 
         colId.setStyle("-fx-alignment: CENTER;");
@@ -82,17 +83,30 @@ public class ListarUserView {
         colRol.setStyle("-fx-alignment: CENTER;");
         colPuntos.setStyle("-fx-alignment: CENTER;");
 
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
+        colId.setCellValueFactory(new PropertyValueFactory<>("usuario"));
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
+        colRol.setCellValueFactory(new PropertyValueFactory<>("email"));
         colPuntos.setCellValueFactory(new PropertyValueFactory<>("puntos"));
 
         tablaUsuarios.getColumns().addAll(colId , colNombre , colRol , colPuntos);
     }
+    private void ajustarAlturaTabla(int numFilas) {
+        double alturaCabecera = 40;
+        double alturaFila = 40;
+        double paddingExtra = 15;
 
-    public void cargarLibros(List<Usuario> listaUsuarios) {
+        tablaUsuarios.setFixedCellSize(alturaFila);
+        tablaUsuarios.prefHeightProperty().bind(
+                tablaUsuarios.fixedCellSizeProperty().multiply(numFilas)
+                        .add(alturaCabecera)
+                        .add(paddingExtra)
+        );
+        tablaUsuarios.setMaxHeight(TableView.USE_PREF_SIZE);
+    }
+    public void cargarLibros(Usuario usuario) {
         tablaUsuarios.getItems().clear();
-        tablaUsuarios.getItems().addAll(listaUsuarios);
+        tablaUsuarios.getItems().addAll(usuario);
+        ajustarAlturaTabla(1);
     }
 
     public TableView<Usuario> getTablaUsuarios() {
