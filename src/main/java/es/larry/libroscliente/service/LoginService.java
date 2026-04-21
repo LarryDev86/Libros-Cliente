@@ -1,9 +1,7 @@
 package es.larry.libroscliente.service;
 
 import es.larry.libroscliente.cliente.AuthHttpClient;
-import es.larry.libroscliente.dto.HistorialLibrosUser;
-import es.larry.libroscliente.dto.LibroFila;
-import es.larry.libroscliente.dto.Usuario;
+import es.larry.libroscliente.dto.*;
 
 import java.util.List;
 
@@ -92,4 +90,11 @@ public class LoginService {
         return authHttpClient.historialLibrosActivos();
     }
 
+    public PreguntaLibro obtenerPregunta(int idLibro) throws Exception {
+        return authHttpClient.obtenerPregunta(idLibro);
+    }
+
+    public RespuestaResponse responderPregunta(int idLibro, int preguntaId, int opcioTriada) throws Exception {
+        return authHttpClient.responderPregunta(idLibro, preguntaId, opcioTriada);
+    }
 }

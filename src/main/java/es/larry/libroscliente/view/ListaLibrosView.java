@@ -223,7 +223,15 @@ public class ListaLibrosView {
             }
         }
     }
-
+    public void mostrarMensajeInfo(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initOwner(stage);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.setGraphic(null);
+        alert.showAndWait();
+    }
     public void mostrarMensajeReserva(LibroFila libro) {
         Alert confirmacion = new Alert(Alert.AlertType.INFORMATION);
         confirmacion.initOwner(stage);

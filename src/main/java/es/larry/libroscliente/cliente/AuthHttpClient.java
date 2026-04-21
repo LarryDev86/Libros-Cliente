@@ -27,6 +27,8 @@ public class AuthHttpClient {
     private static final String LISTAR_LIBROS_URL = "http://localhost:8080/api/libros";
     private static final String DEVOLVER_LIBRO_URL = "http://localhost:8080/api/prestamos/";
     private static final String HISTORIAL = "http://localhost:8080/api/prestamos/mi-historial";
+    private static final String PREGUNTA_RETO = "http://localhost:8080/api/prestamos/pregunta/";
+    private static final String RESPONDER_RETO = "http://localhost:8080/api/prestamos/responder/";
 
     private HttpClient client;
     private ObjectMapper mapper;
@@ -309,5 +311,47 @@ public class AuthHttpClient {
         }
 
         return listaActiva;
+    }
+
+    public PreguntaLibro obtenerPregunta(int idLibro) throws Exception {
+
+        String token = Sesion.getToken();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(PREGUNTA_RETO+idLibro))
+                .header("Authorization", "Bearer " + token)
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Error al obtener la pregunta: " + response.body());
+        }
+
+        return mapper.readValue(response.body(), PreguntaLibro.class);
+    }
+    public RespuestaResponse responderPregunta(int idLibro, int preguntaId, int opcioTriada) throws Exception {
+        String token = Sesion.getToken();
+
+        RespuestaRequest requestBody = new RespuestaRequest(preguntaId, opcioTriada);
+        String json = mapper.writeValueAsString(requestBody);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(RESPONDER_RETO + idLibro))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(
+                request,
+                HttpResponse.BodyHandlers.ofString()
+        );
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Error al responder la pregunta: " + response.body());
+        }
+
+        return mapper.readValue(response.body(), RespuestaResponse.class);
     }
 }
