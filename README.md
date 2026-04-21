@@ -21,7 +21,7 @@ El usuario debe elegir la opción correcta
 Resultado:
 
 Acierto: +10 puntos adicionales
-Fallo: no se obtienen puntos extra
+Fallo: no se obtienen puntos extra y además se le restan 5 puntos.
 
 Este mecanismo introduce una capa de interacción y refuerza el sistema de gamificación
 
