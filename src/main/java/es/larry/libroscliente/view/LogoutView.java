@@ -26,7 +26,7 @@ public class LogoutView {
         root = new VBox();
         root.getStyleClass().add("fondo");
         // Menu desplegable (ahora como botón)
-        mbMenu = new MenuButton("Menu");
+        mbMenu = new MenuButton(rol);
         mbMenu.getStyleClass().add("menu-usuario");
         mbMenu.setPrefWidth(90);
         mbMenu.setPrefHeight(24);
@@ -48,6 +48,7 @@ public class LogoutView {
         topBar.setPadding(new Insets(20, 30, 0, 0));
         root.getChildren().add(topBar);
         stage = new Stage();
+        stage.setTitle("Bienvenido");
         Scene scene = new Scene(root,700,500);
         // Cargar CSS
         UIUtils.applyMainStyle(scene);
@@ -58,9 +59,9 @@ public class LogoutView {
     }
 
     public void setRol(String rol) {
-        stage.setTitle("Bienvenido "+rol);
+        this.rol = rol;
+        mbMenu.setText(rol);
     }
-
     public Parent getRoot() {
         return root;
     }

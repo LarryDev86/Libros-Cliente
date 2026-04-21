@@ -5,35 +5,37 @@ public class LibroFila {
     private int id;
     private String titulo;
     private String autor;
-    private String categoria;
-    private boolean disponible;
+    private String editorial;
+    private String estado;
 
+    public LibroFila() {
+    }
 
-    public LibroFila(int id, String titulo, String autor, String categoria, boolean disponible) {
+    public LibroFila(int id, String titulo, String autor, String editorial, String estado) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
-        this.categoria = categoria;
-        this.disponible = disponible;
+        this.editorial = editorial;
+        this.estado = estado;
     }
 
     public int getId() {
         return id;
     }
 
-    public boolean isDisponible() {
-        return disponible;
+    public String getEstado() {
+        return estado;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getEditorial() {
+        return editorial;
     }
 
     public String getAutor() {
         return autor;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getTitulo() {
+        return titulo;
     }
 }

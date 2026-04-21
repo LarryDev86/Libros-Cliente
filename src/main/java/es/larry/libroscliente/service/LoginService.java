@@ -1,8 +1,12 @@
 package es.larry.libroscliente.service;
 
 import es.larry.libroscliente.cliente.AuthHttpClient;
-import es.larry.libroscliente.dto.RequestDtoRegistro;
+import es.larry.libroscliente.dto.HistorialLibrosUser;
+import es.larry.libroscliente.dto.LibroFila;
 import es.larry.libroscliente.dto.Usuario;
+
+import java.util.List;
+
 
 // Esta clase recoge la logica de negocio que se encarga de la peticiones al servidor
 public class LoginService {
@@ -63,7 +67,29 @@ public class LoginService {
         return authHttpClient.modificarUSer(usuario,nombreCompleto,email,password);
     }
 
+    public int bajaUser(String token){
+        return authHttpClient.bajaUser(token);
+    }
+
+    public int devolverLibro(int idLibro){
+        return authHttpClient.devolverLibro(idLibro);
+    }
+    public int reservarLibro(int idLibro){
+        return authHttpClient.reservarLibro(idLibro);
+    }
     public Usuario datosUsuario(){
         return authHttpClient.datosUsuario();
     }
+
+    public List<LibroFila> listarLibros(){
+        return authHttpClient.listarLibros();
+    }
+
+    public List<HistorialLibrosUser>historialLibros(){
+        return authHttpClient.historialLibros();
+    }
+    public List<HistorialLibrosUser>obtenerMiHistorialCompleto(){
+        return authHttpClient.historialLibrosActivos();
+    }
+
 }

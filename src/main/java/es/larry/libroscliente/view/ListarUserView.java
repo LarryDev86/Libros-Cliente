@@ -1,6 +1,5 @@
 package es.larry.libroscliente.view;
 
-import es.larry.libroscliente.dto.RequestDtoRegistro;
 import es.larry.libroscliente.dto.Usuario;
 import es.larry.libroscliente.utils.UIUtils;
 import javafx.geometry.Insets;
@@ -16,7 +15,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.List;
 
 public class ListarUserView {
 
@@ -28,6 +26,7 @@ public class ListarUserView {
     private TableColumn<Usuario, String> colNombre;
     private TableColumn<Usuario, String> colRol;
     private TableColumn<Usuario, Integer> colPuntos;
+    private TableColumn<Usuario, Integer> colPreguntasAcert;
 
     public ListarUserView() {
 
@@ -46,7 +45,7 @@ public class ListarUserView {
         VBox.setVgrow(tablaUsuarios, Priority.ALWAYS);
 
         stage = new Stage();
-        Scene scene = new Scene(root, 900, 600);
+        Scene scene = new Scene(root, 1000, 800);
 
         UIUtils.applyMainStyle(scene);
         UIUtils.setStyleTablaLibros(scene);
@@ -77,18 +76,21 @@ public class ListarUserView {
         colNombre = new TableColumn<>("Nombre completo");
         colRol = new TableColumn<>("Email");
         colPuntos = new TableColumn<>("Puntos");
+        colPreguntasAcert = new TableColumn<>("Preguntas acertadas");
 
         colId.setStyle("-fx-alignment: CENTER;");
         colNombre.setStyle("-fx-alignment: CENTER;");
         colRol.setStyle("-fx-alignment: CENTER;");
         colPuntos.setStyle("-fx-alignment: CENTER;");
+        colPreguntasAcert.setStyle("-fx-alignment: CENTER;");
 
         colId.setCellValueFactory(new PropertyValueFactory<>("usuario"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
         colRol.setCellValueFactory(new PropertyValueFactory<>("email"));
         colPuntos.setCellValueFactory(new PropertyValueFactory<>("puntos"));
+        colPreguntasAcert.setCellValueFactory(new PropertyValueFactory<>("preguntesEncertades"));
 
-        tablaUsuarios.getColumns().addAll(colId , colNombre , colRol , colPuntos);
+        tablaUsuarios.getColumns().addAll(colId , colNombre , colRol , colPuntos,colPreguntasAcert);
     }
     private void ajustarAlturaTabla(int numFilas) {
         double alturaCabecera = 40;

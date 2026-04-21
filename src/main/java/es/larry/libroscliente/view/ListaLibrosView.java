@@ -1,5 +1,6 @@
 package es.larry.libroscliente.view;
 
+import es.larry.libroscliente.dto.HistorialLibrosUser;
 import es.larry.libroscliente.dto.LibroFila;
 import es.larry.libroscliente.utils.UIUtils;
 import javafx.geometry.Insets;
@@ -14,22 +15,28 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class ListaLibrosView {
 
+    private List<HistorialLibrosUser> listaActiva = new ArrayList<>();
     private VBox root;
     private Stage stage;
 
     private Label lblTitulo;
-
     private TableView<LibroFila> tablaLibros;
     private TableColumn<LibroFila, Integer> colId;
     private TableColumn<LibroFila, String> colTitulo;
     private TableColumn<LibroFila, String> colAutor;
-    private TableColumn<LibroFila, String> colGenero;
-    private TableColumn<LibroFila, Boolean> colDisponi;
+    private TableColumn<LibroFila, String> colEditorial;
+    private TableColumn<LibroFila, String> colEstado;
+
+    private Consumer<LibroFila> onReservar;
+    private Consumer<LibroFila> onListaEspera;
+    private Consumer<LibroFila> onDevolver;
 
     public ListaLibrosView() {
         root = new VBox(15);
@@ -55,6 +62,18 @@ public class ListaLibrosView {
         UIUtils.setAppIcon(stage);
         stage.setScene(scene);
     }
+    private boolean esLibroActivoDelUsuario(int idLibro) {
+        if (listaActiva == null || listaActiva.isEmpty()) {
+            return false;
+        }
+
+        for (HistorialLibrosUser libroActivo : listaActiva) {
+            if (libroActivo.getIdLibro() == idLibro) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private HBox crearTopBar() {
         Region spacer = new Region();
@@ -78,32 +97,32 @@ public class ListaLibrosView {
         colId = new TableColumn<>("ID");
         colTitulo = new TableColumn<>("Título");
         colAutor = new TableColumn<>("Autor");
-        colGenero = new TableColumn<>("Categoria");
-        colDisponi = new TableColumn<>("Disponibilidad");
+        colEditorial = new TableColumn<>("Editorial");
+        colEstado = new TableColumn<>("Estado");
 
         colId.setStyle("-fx-alignment: CENTER;");
         colTitulo.setStyle("-fx-alignment: CENTER;");
         colAutor.setStyle("-fx-alignment: CENTER;");
-        colGenero.setStyle("-fx-alignment: CENTER;");
-        colDisponi.setStyle("-fx-alignment: CENTER;");
+        colEditorial.setStyle("-fx-alignment: CENTER;");
+        colEstado.setStyle("-fx-alignment: CENTER;");
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         colAutor.setCellValueFactory(new PropertyValueFactory<>("autor"));
-        colGenero.setCellValueFactory(new PropertyValueFactory<>("categoria"));
-        colDisponi.setCellValueFactory(new PropertyValueFactory<>("disponible"));
+        colEditorial.setCellValueFactory(new PropertyValueFactory<>("editorial"));
+        colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
-        colDisponi.setCellFactory(column -> new TableCell<LibroFila, Boolean>() {
+        colEstado.setCellFactory(column -> new TableCell<LibroFila, String>() {
             @Override
-            protected void updateItem(Boolean disponible, boolean empty) {
-                super.updateItem(disponible, empty);
+            protected void updateItem(String estado, boolean empty) {
+                super.updateItem(estado, empty);
 
                 setAlignment(Pos.CENTER);
 
-                if (empty || disponible == null) {
+                if (empty || estado == null) {
                     setText(null);
                     setStyle("-fx-alignment: CENTER;");
-                } else if (disponible) {
+                } else if (estado.equalsIgnoreCase("DISPONIBLE")) {
                     setText("Disponible");
                     setStyle("-fx-alignment: CENTER; -fx-text-fill: green; -fx-font-weight: bold;");
                 } else {
@@ -125,7 +144,8 @@ public class ListaLibrosView {
 
             return row;
         });
-        tablaLibros.getColumns().addAll(colId, colTitulo, colAutor, colGenero, colDisponi);
+
+        tablaLibros.getColumns().addAll(colId, colTitulo, colAutor, colEditorial, colEstado);
     }
 
     public void cargarLibros(List<LibroFila> listaLibros) {
@@ -140,31 +160,43 @@ public class ListaLibrosView {
         alert.setHeaderText(libro.getTitulo());
         alert.setGraphic(null);
 
-        String estado = libro.isDisponible() ? "Disponible" : "No disponible";
+        String estado = libro.getEstado().equalsIgnoreCase("DISPONIBLE")
+                ? "Disponible"
+                : "No disponible";
 
         alert.setContentText(
                 "ID: " + libro.getId() + "\n" +
                         "Título: " + libro.getTitulo() + "\n" +
                         "Autor: " + libro.getAutor() + "\n" +
-                        "Categoría: " + libro.getCategoria() + "\n" +
+                        "Editorial: " + libro.getEditorial() + "\n" +
                         "Estado: " + estado
         );
 
-        ButtonType botonAccion;
+        ButtonType botonReservar = null;
+        ButtonType botonListaEspera = null;
         ButtonType botonDevolver = null;
-
-        if (libro.isDisponible()) {
-            botonAccion = new ButtonType("Reservar");
-        } else {
-            botonAccion = new ButtonType("Entrar en lista de espera");
-            botonDevolver = new ButtonType("Devolver libro");
-        }
-
         ButtonType botonCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-        alert.getButtonTypes().clear();
-        alert.getButtonTypes().add(botonAccion);
+        boolean esActivo = esLibroActivoDelUsuario(libro.getId());
 
+        if (libro.getEstado().equalsIgnoreCase("DISPONIBLE")) {
+            botonReservar = new ButtonType("Reservar");
+        } else {
+            if (esActivo) {
+                botonDevolver = new ButtonType("Devolver libro");
+            } else {
+                botonListaEspera = new ButtonType("Entrar en lista de espera");
+            }
+        }
+
+        alert.getButtonTypes().clear();
+
+        if (botonReservar != null) {
+            alert.getButtonTypes().add(botonReservar);
+        }
+        if (botonListaEspera != null) {
+            alert.getButtonTypes().add(botonListaEspera);
+        }
         if (botonDevolver != null) {
             alert.getButtonTypes().add(botonDevolver);
         }
@@ -176,20 +208,23 @@ public class ListaLibrosView {
         if (resultado.isPresent()) {
             ButtonType response = resultado.get();
 
-            if (response == botonAccion) {
-                if (libro.isDisponible()) {
-                    //reservarLibro(libro);
-                    mostrarCazaPalabras(libro);
-                } else {
-                    apuntarListaEspera(libro);
+            if (botonReservar != null && response == botonReservar) {
+                if (onReservar != null) {
+                    onReservar.accept(libro);
+                }
+            } else if (botonListaEspera != null && response == botonListaEspera) {
+                if (onListaEspera != null) {
+                    onListaEspera.accept(libro);
                 }
             } else if (botonDevolver != null && response == botonDevolver) {
-                devolverLibro(libro);
+                if (onDevolver != null) {
+                    onDevolver.accept(libro);
+                }
             }
         }
     }
 
-    private void reservarLibro(LibroFila libro) {
+    public void mostrarMensajeReserva(LibroFila libro) {
         Alert confirmacion = new Alert(Alert.AlertType.INFORMATION);
         confirmacion.initOwner(stage);
         confirmacion.setTitle("Reserva realizada");
@@ -199,7 +234,7 @@ public class ListaLibrosView {
         confirmacion.showAndWait();
     }
 
-    private void apuntarListaEspera(LibroFila libro) {
+    public void mostrarMensajeListaEspera(LibroFila libro) {
         Alert confirmacion = new Alert(Alert.AlertType.INFORMATION);
         confirmacion.initOwner(stage);
         confirmacion.setTitle("Lista de espera");
@@ -209,7 +244,7 @@ public class ListaLibrosView {
         confirmacion.showAndWait();
     }
 
-    private void devolverLibro(LibroFila libro) {
+    public void mostrarMensajeDevolucion(LibroFila libro) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initOwner(stage);
         alert.setTitle("Devolución");
@@ -219,90 +254,26 @@ public class ListaLibrosView {
         alert.showAndWait();
     }
 
-    //ventana caza palabras
-    private void mostrarCazaPalabras(LibroFila libro) {
-
-        Dialog<String> dialog = new Dialog<>();
-        dialog.initOwner(stage);
-        dialog.setTitle("Caza-palabras");
-        dialog.setHeaderText("Selecciona la palabra relacionada con el libro");
-
-        dialog.setGraphic(null);
-
-        // Simulación (luego esto vendrá del servidor)
-        List<String> palabras = obtenerPalabrasDelServidor(libro);
-
-        VBox contenido = new VBox(10);
-        contenido.setPadding(new Insets(15));
-
-        Label lblLibro = new Label("Libro: " + libro.getTitulo());
-
-        ToggleGroup grupo = new ToggleGroup();
-
-        VBox opcionesBox = new VBox(5);
-
-        for (String palabra : palabras) {
-            RadioButton rb = new RadioButton(palabra);
-            rb.setToggleGroup(grupo);
-            opcionesBox.getChildren().add(rb);
-        }
-
-        contenido.getChildren().addAll(lblLibro, opcionesBox);
-
-        dialog.getDialogPane().setContent(contenido);
-
-        ButtonType btnEnviar = new ButtonType("Enviar");
-        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        dialog.getDialogPane().getButtonTypes().addAll(btnEnviar, btnCancelar);
-
-        dialog.setResultConverter(button -> {
-            if (button == btnEnviar) {
-                RadioButton seleccionado = (RadioButton) grupo.getSelectedToggle();
-                if (seleccionado != null) {
-                    return seleccionado.getText();
-                }
-            }
-            return null;
-        });
-
-        Optional<String> resultado = dialog.showAndWait();
-
-        resultado.ifPresent(palabraElegida -> {
-            validarRespuesta(libro, palabraElegida);
-        });
-    }
-    // simulacion del server
-    private List<String> obtenerPalabrasDelServidor(LibroFila libro) {
-        // Simulación
-        if (libro.getTitulo().toLowerCase().contains("castillo")) {
-            return List.of("castillo", "avión", "pizza");
-        }
-        return List.of("libro", "coche", "mesa");
-    }
-    private void validarRespuesta(LibroFila libro, String palabra) {
-
-        boolean acierto = palabraCorrecta(libro, palabra);
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    public void mostrarError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(stage);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
         alert.setGraphic(null);
-
-        if (acierto) {
-            alert.setTitle("Correcto");
-            alert.setHeaderText(null);
-            alert.setContentText("¡Correcto! Has ganado +10 puntos 🎉");
-        } else {
-            alert.setTitle("Incorrecto");
-            alert.setHeaderText(null);
-            alert.setContentText("Fallaste 😢 No obtienes puntos extra");
-        }
-
         alert.showAndWait();
     }
-    //Logica de comprobacion
-    private boolean palabraCorrecta(LibroFila libro, String palabra) {
-        return libro.getTitulo().toLowerCase().contains(palabra.toLowerCase());
+
+    public void setOnReservar(Consumer<LibroFila> onReservar) {
+        this.onReservar = onReservar;
+    }
+
+    public void setOnListaEspera(Consumer<LibroFila> onListaEspera) {
+        this.onListaEspera = onListaEspera;
+    }
+
+    public void setOnDevolver(Consumer<LibroFila> onDevolver) {
+        this.onDevolver = onDevolver;
     }
 
     public Parent getView() {
@@ -319,5 +290,9 @@ public class ListaLibrosView {
 
     public void show() {
         stage.show();
+    }
+
+    public void setListaActiva(List<HistorialLibrosUser> listaActiva) {
+        this.listaActiva = listaActiva;
     }
 }
