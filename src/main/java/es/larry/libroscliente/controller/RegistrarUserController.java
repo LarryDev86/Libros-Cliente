@@ -1,7 +1,6 @@
 package es.larry.libroscliente.controller;
 
 import es.larry.libroscliente.service.LoginService;
-import es.larry.libroscliente.sesion.Sesion;
 import es.larry.libroscliente.view.HomeView;
 import es.larry.libroscliente.view.RegistrarUserView;
 import javafx.animation.PauseTransition;

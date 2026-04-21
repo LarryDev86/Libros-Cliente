@@ -6,7 +6,6 @@ import es.larry.libroscliente.view.ListaHistorialLibrosView;
 import es.larry.libroscliente.view.ListarUserView;
 import javafx.concurrent.Task;
 import javafx.scene.control.Separator;
-
 import java.util.List;
 
 public class ListaUsersController {

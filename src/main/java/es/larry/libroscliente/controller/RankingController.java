@@ -7,6 +7,10 @@ import es.larry.libroscliente.view.RankingView;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* ESTA PANTALLA LA DEJAMOS ASI EN PROCCESO PORQUE EN EL SERVER NO HAN IMPLEMENTADO NADA
+* PARA ELLO
+* */
 public class RankingController {
 
     private RankingView rankingView;
