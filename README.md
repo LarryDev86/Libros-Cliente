@@ -1,8 +1,8 @@
-Libro Retos
+## Libro Retos
 
 Aplicación de escritorio desarrollada en JavaFX que simula una biblioteca online con autenticación y un sistema básico de gamificación.
 
-Funcionalidades
+## Funcionalidades
 Autenticación de usuarios mediante JWT
 Registro y gestión de usuario
 Consulta de catálogo de libros
@@ -18,14 +18,14 @@ Se muestran tres palabras
 Solo una está relacionada con el libro seleccionado
 El usuario debe elegir la opción correcta
 
-Resultado:
+## Resultado:
 
 Acierto: +10 puntos adicionales
 Fallo: no se obtienen puntos extra y además se le restan 5 puntos.
 
 Este mecanismo introduce una capa de interacción y refuerza el sistema de gamificación
 
-Estructura del proyecto
+## Estructura del proyecto
 cliente     → comunicación HTTP con el servidor
 controller  → lógica de interacción
 service     → lógica de negocio
@@ -48,4 +48,30 @@ Funcional: autenticación, gestión de libros, sistema de puntos y minijuego
 Pendiente: integración completa del ranking
 Autor
 
-Proyecto orientado al desarrollo de aplicaciones cliente-servidor con Java y la incorporación de elementos de gamificación.
+------------------------------------------------------------------------------
+
+## Últimas mejoras implementadas
+## v2.0
+### Mejoras de navegación
+- Se ha añadido un botón de flecha para volver atrás en distintas pantallas, haciendo la navegación más natural e intuitiva.
+
+### Panel de administración
+- Se ha diseñado una nueva pantalla de administración.
+- El administrador puede realizar las siguientes acciones:
+  - Listar todos los usuarios.
+  - Crear nuevos usuarios.
+  - Eliminar usuarios.
+  - Restablecer contraseñas de usuarios.
+  - Listar todos los libros.
+  - Insertar nuevos libros.
+  - Eliminar libros.
+
+### Mejoras en el listado de libros
+- Se ha añadido un sistema de filtrado dinámico por:
+  - Título.
+  - Autor.
+  - Editorial.
+- La pantalla distingue entre usuarios normales y administradores:
+  - Los usuarios pueden seleccionar libros para reservarlos o devolverlos.
+  - Los administradores pueden consultar el catálogo, pero tienen deshabilitada la interacción de reserva sobre los libros.
+
