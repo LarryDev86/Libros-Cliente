@@ -7,7 +7,7 @@ public class LibroFila {
     private String autor;
     private String editorial;
     private String estado;
-
+    private String isbn;
     public LibroFila() {
     }
 
@@ -18,7 +18,13 @@ public class LibroFila {
         this.editorial = editorial;
         this.estado = estado;
     }
-
+    public LibroFila(String titulo, String autor, String editorial) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.editorial = editorial;
+        this.estado = "DISPONIBLE";
+        this.isbn = null;
+    }
     public int getId() {
         return id;
     }
@@ -37,5 +43,9 @@ public class LibroFila {
 
     public String getTitulo() {
         return titulo;
+    }
+
+    public String getIsbn() {
+        return isbn;
     }
 }

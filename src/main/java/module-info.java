@@ -7,6 +7,7 @@ module es.larry.libroscliente {
     requires java.sql;
     requires jdk.compiler;
     requires javafx.base;
+    requires org.json;
 
 
     opens es.larry.libroscliente to javafx.fxml;

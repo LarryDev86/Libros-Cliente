@@ -97,4 +97,23 @@ public class LoginService {
     public RespuestaResponse responderPregunta(int idLibro, int preguntaId, int opcioTriada) throws Exception {
         return authHttpClient.responderPregunta(idLibro, preguntaId, opcioTriada);
     }
+
+    public List<Usuario> listarUsuariosAdmin() {
+        return authHttpClient.listarUsuariosAdmin();
+    }
+
+    public int eliminarUser(int id){
+        return authHttpClient.eliminarUser(id);
+    }
+    public int restablecer(int id , String password){
+        return authHttpClient.restablecer(id, password);
+    }
+
+    public int insertarLibro(LibroFila libro){
+        return authHttpClient.insertarLibro(libro);
+    }
+
+    public int borrarLibro(int idLibro){
+        return authHttpClient.borrarLibro(idLibro);
+    }
 }

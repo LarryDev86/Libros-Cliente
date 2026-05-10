@@ -34,7 +34,7 @@ public class ListaUsersController {
 
     private void initData() {
         try {
-            listarUserView.cargarLibros(service.datosUsuario());
+            listarUserView.cargarUsuario(service.datosUsuario());
         } catch (Exception e) {
             System.out.println("Error cargando usuario: " + e.getMessage());
         }
@@ -45,6 +45,10 @@ public class ListaUsersController {
                 return service.historialLibros();
             }
         };
+        listarUserView.getVolverBtn().setOnAction( e -> {
+            //Cerramos la venta
+            listarUserView.getStage().close();
+        });
 
         taskHistorial.setOnSucceeded(event -> {
             List<HistorialLibrosUser> historial = taskHistorial.getValue();

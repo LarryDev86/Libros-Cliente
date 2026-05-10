@@ -18,6 +18,11 @@ public class RegistrarUserController {
         this.service = new LoginService();
         initEvents();
     }
+    public RegistrarUserController(RegistrarUserView registrarUserView) {
+        this.registrarUserView = registrarUserView;
+        this.service = new LoginService();
+        initEvents();
+    }
 
     private void initEvents(){
         registrarUserView.getBtnRegistro().setOnAction(e -> nuevoRegistro());

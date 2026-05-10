@@ -2,11 +2,14 @@ package es.larry.libroscliente.controller;
 
 import es.larry.libroscliente.service.LoginService;
 import es.larry.libroscliente.sesion.Sesion;
+import es.larry.libroscliente.utils.JwtUtils;
+import es.larry.libroscliente.view.AdminView;
 import es.larry.libroscliente.view.HomeView;
 import es.larry.libroscliente.view.LoginView;
 import es.larry.libroscliente.view.LogoutView;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
+
 
 /* Clase implementa lo que sera la pantalla donde logearse el usuario y donde
 * enviar los datos a la capa de servicio y le traera aqui la respuesta del servidor
@@ -31,21 +34,35 @@ public class LoginController {
         loginView.getBtnBaja().setOnAction(e -> bajaUser());
     }
     private void login(){
-        String nombre = loginView.getTxtUsuer().getText();
+        String nombre = loginView.getTxtUsuer().getText().toLowerCase();
         String password = loginView.getTxtPassword().getText();
 
         try {
             String token = service.login(nombre, password);
+            System.out.println("Token: "+token);
             if (token != null && !token.isBlank()) {
                 //Guardamos el token en memoria
                 Sesion.setToken(token);
                 //Aqui cerramos las dos ventanas.
                 homeView.getStage().close();
                 loginView.getStage().close();
-                LogoutView lg = new LogoutView();
-                lg.setRol(nombre);
-                new LogoutController(lg,homeView,token);
-                lg.show();
+                String role = JwtUtils.getRole(token);
+                if(role.equalsIgnoreCase("ADMIN")){
+                    //Mostramos pantalla Admin
+                    System.out.println("Soy una administradora");
+                    AdminView av = new AdminView();
+                    av.setRol();
+                    new AdminController(av,homeView);
+                    av.show();
+                }else{
+
+                    // Mostramos pantalla user
+                    LogoutView lg = new LogoutView();
+                    lg.setRol(nombre);
+                    new LogoutController(lg,homeView,token);
+                    lg.show();
+                }
+
             } else {
                 loginView.getLblMensaje().setText("Credenciales incorrectas");
             }

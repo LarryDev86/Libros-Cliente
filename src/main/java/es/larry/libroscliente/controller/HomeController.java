@@ -15,7 +15,6 @@ public class HomeController {
     }
     // Con este boton se invoca el metodo openLoginWindows() y con ello desplegar la ventana de loginUser
     private void initEvents(){
-
         homeView.getLogionButton().setOnAction(e -> openLoginWindows());
         homeView.getBtnregistro().setOnAction(e -> registroUser());
     }

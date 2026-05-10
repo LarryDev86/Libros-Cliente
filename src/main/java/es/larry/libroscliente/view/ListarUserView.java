@@ -5,6 +5,7 @@ import es.larry.libroscliente.utils.UIUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,6 +16,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.List;
 
 public class ListarUserView {
 
@@ -22,9 +24,11 @@ public class ListarUserView {
     private Stage stage;
     private Label lblTitulo;
     private TableView<Usuario> tablaUsuarios;
+    private Button volverBtn;
     private TableColumn<Usuario, Integer> colId;
-    private TableColumn<Usuario, String> colNombre;
-    private TableColumn<Usuario, String> colRol;
+    private TableColumn<Usuario, String> colUsuario;
+    private TableColumn<Usuario, String> colNombreCompleto;
+    private TableColumn<Usuario, String> colEmail;
     private TableColumn<Usuario, Integer> colPuntos;
     private TableColumn<Usuario, Integer> colPreguntasAcert;
 
@@ -37,19 +41,36 @@ public class ListarUserView {
         crearTitulo();
         crearTablaVacia();
 
+        // Botón volver
+        volverBtn = new Button("⬅");
+        volverBtn.getStyleClass().add("boton-volver");
+
+        // Barra superior
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox topBar = new HBox(volverBtn, spacer);
+        topBar.setAlignment(Pos.CENTER_LEFT);
+
+        // Padding para separarlo del borde izquierdo
+        topBar.setPadding(new Insets(10, 0, 10, 10));
+
         root.getChildren().addAll(
-                crearTopBar(),
+                topBar,
                 lblTitulo,
                 tablaUsuarios
         );
+
         VBox.setVgrow(tablaUsuarios, Priority.ALWAYS);
 
         stage = new Stage();
+
         Scene scene = new Scene(root, 1000, 800);
 
         UIUtils.applyMainStyle(scene);
         UIUtils.setStyleTablaLibros(scene);
         UIUtils.setAppIcon(stage);
+
         stage.setScene(scene);
     }
 
@@ -72,26 +93,37 @@ public class ListarUserView {
         tablaUsuarios.getStyleClass().add("tabla-libros");
         tablaUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
-        colId = new TableColumn<>("Usuario");
-        colNombre = new TableColumn<>("Nombre completo");
-        colRol = new TableColumn<>("Email");
+        colId = new TableColumn<>("ID");
+        colUsuario = new TableColumn<>("Usuario");
+        colNombreCompleto = new TableColumn<>("Nombre completo");
+        colEmail = new TableColumn<>("Email");
         colPuntos = new TableColumn<>("Puntos");
         colPreguntasAcert = new TableColumn<>("Preguntas acertadas");
 
         colId.setStyle("-fx-alignment: CENTER;");
-        colNombre.setStyle("-fx-alignment: CENTER;");
-        colRol.setStyle("-fx-alignment: CENTER;");
+        colUsuario.setStyle("-fx-alignment: CENTER;");
+        colNombreCompleto.setStyle("-fx-alignment: CENTER;");
+        colEmail.setStyle("-fx-alignment: CENTER;");
         colPuntos.setStyle("-fx-alignment: CENTER;");
         colPreguntasAcert.setStyle("-fx-alignment: CENTER;");
 
-        colId.setCellValueFactory(new PropertyValueFactory<>("usuario"));
-        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
-        colRol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
+        colNombreCompleto.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colPuntos.setCellValueFactory(new PropertyValueFactory<>("puntos"));
         colPreguntasAcert.setCellValueFactory(new PropertyValueFactory<>("preguntesEncertades"));
 
-        tablaUsuarios.getColumns().addAll(colId , colNombre , colRol , colPuntos,colPreguntasAcert);
+        tablaUsuarios.getColumns().addAll(
+                colId,
+                colUsuario,
+                colNombreCompleto,
+                colEmail,
+                colPuntos,
+                colPreguntasAcert
+        );
     }
+
     private void ajustarAlturaTabla(int numFilas) {
         double alturaCabecera = 40;
         double alturaFila = 40;
@@ -105,10 +137,19 @@ public class ListarUserView {
         );
         tablaUsuarios.setMaxHeight(TableView.USE_PREF_SIZE);
     }
-    public void cargarLibros(Usuario usuario) {
+    public void cargarUsuario(Usuario usuario) {
         tablaUsuarios.getItems().clear();
-        tablaUsuarios.getItems().addAll(usuario);
+        tablaUsuarios.getItems().add(usuario);
         ajustarAlturaTabla(1);
+    }
+    public void cargarUsuarios(List<Usuario> usuarios) {
+        tablaUsuarios.getItems().clear();
+        tablaUsuarios.getItems().addAll(usuarios);
+        ajustarAlturaTabla(usuarios.size());
+    }
+
+    public Button getVolverBtn() {
+        return volverBtn;
     }
 
     public TableView<Usuario> getTablaUsuarios() {
@@ -123,7 +164,7 @@ public class ListarUserView {
         return root;
     }
 
-    public void show(){
+    public void show() {
         stage.show();
     }
 }

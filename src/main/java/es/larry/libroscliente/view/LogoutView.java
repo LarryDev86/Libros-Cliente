@@ -48,7 +48,7 @@ public class LogoutView {
         topBar.setPadding(new Insets(20, 30, 0, 0));
         root.getChildren().add(topBar);
         stage = new Stage();
-        stage.setTitle("Bienvenido");
+        stage.setTitle("Bienvenido - Sesion Usuario");
         Scene scene = new Scene(root,700,500);
         // Cargar CSS
         UIUtils.applyMainStyle(scene);

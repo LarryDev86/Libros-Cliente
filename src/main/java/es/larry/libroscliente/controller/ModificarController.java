@@ -35,14 +35,13 @@ public class ModificarController {
             if (status == 200) {
                 modificarView.getLblMensaje().setText("Modificacion correcta");
                 modificarView.getLblMensaje().setStyle("-fx-text-fill: green;");
-                //Mensaje con temporizador
-                PauseTransition pausa = new PauseTransition(Duration.seconds(2));
-                pausa.setOnFinished(event -> modificarView.getStage().close());
-                pausa.play();
             } else {
                 modificarView.getLblMensaje().setText("Credenciales incorrectas");
             }
-
+            //Mensaje con temporizador
+            PauseTransition pausa = new PauseTransition(Duration.seconds(2));
+            pausa.setOnFinished(event -> modificarView.getStage().close());
+            pausa.play();
         } catch (Exception e) {
             modificarView.getLblMensaje().setText("Error al conectar con el servidor");
         }

@@ -5,6 +5,8 @@ import es.larry.libroscliente.dto.LibroFila;
 import es.larry.libroscliente.dto.PreguntaLibro;
 import es.larry.libroscliente.dto.RespuestaResponse;
 import es.larry.libroscliente.service.LoginService;
+import es.larry.libroscliente.sesion.Sesion;
+import es.larry.libroscliente.utils.JwtUtils;
 import es.larry.libroscliente.view.ListaLibrosView;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBar;
@@ -13,6 +15,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +24,18 @@ public class ListaLibrosController {
 
     private final ListaLibrosView listaLibrosView;
     private final LoginService service;
+    private boolean esAdmin;
     private List<HistorialLibrosUser> listaActiva;
+    private List<LibroFila> listaCompletaLibros;
 
     public ListaLibrosController(ListaLibrosView listaLibrosView) {
         this.listaLibrosView = listaLibrosView;
         this.service = new LoginService();
         this.listaActiva = new ArrayList<>();
-
+        this.listaCompletaLibros = new ArrayList<>();
+        String token = Sesion.getToken();
+        String role = JwtUtils.getRole(token);
+        esAdmin = role.equalsIgnoreCase("ADMIN");
         initView();
         initEvents();
     }
@@ -35,19 +43,42 @@ public class ListaLibrosController {
     private void initView() {
         cargarLibros();
         cargarPrestamosActivos();
+        // Aqui haremos que si es ADMIN no sera clicable los libros y si es USER si
+        listaLibrosView.configurarClicksLibros(esAdmin);
         listaLibrosView.show();
+    }
+
+    public boolean isEsAdmin() {
+        return esAdmin;
     }
 
     private void initEvents() {
         listaLibrosView.setOnReservar(this::reservarLibro);
         listaLibrosView.setOnListaEspera(this::apuntarListaEspera);
         listaLibrosView.setOnDevolver(this::devolverLibro);
+
+        listaLibrosView.getVolverBtn().setOnAction(e -> {
+            listaLibrosView.getStage().close();
+        });
+
+        listaLibrosView.getTxtFiltro().textProperty().addListener((obs, oldValue, newValue) -> {
+            filtrarLibros();
+        });
+
+        listaLibrosView.getCbFiltro().valueProperty().addListener((obs, oldValue, newValue) -> {
+            filtrarLibros();
+        });
+
+        listaLibrosView.getBtnLimpiarFiltro().setOnAction(e -> {
+            listaLibrosView.getTxtFiltro().clear();
+            listaLibrosView.cargarLibros(listaCompletaLibros);
+        });
     }
 
     private void cargarLibros() {
         try {
-            List<LibroFila> lista = service.listarLibros();
-            listaLibrosView.cargarLibros(lista);
+            listaCompletaLibros = service.listarLibros();
+            listaLibrosView.cargarLibros(listaCompletaLibros);
         } catch (Exception e) {
             listaLibrosView.mostrarError("No se pudieron cargar los libros.");
         }
@@ -66,6 +97,38 @@ public class ListaLibrosController {
     private void refrescarLibros() {
         cargarLibros();
         cargarPrestamosActivos();
+        filtrarLibros();
+    }
+
+    private void filtrarLibros() {
+        String texto = listaLibrosView.getTxtFiltro().getText();
+
+        if (texto == null || texto.isBlank()) {
+            listaLibrosView.cargarLibros(listaCompletaLibros);
+            return;
+        }
+
+        String filtro = listaLibrosView.getCbFiltro().getValue();
+        String busqueda = texto.toLowerCase().trim();
+
+        List<LibroFila> filtrados = listaCompletaLibros.stream()
+                .filter(libro -> {
+                    if ("Autor".equals(filtro)) {
+                        return libro.getAutor() != null &&
+                                libro.getAutor().toLowerCase().equalsIgnoreCase(busqueda);
+                    }
+
+                    if ("Editorial".equals(filtro)) {
+                        return libro.getEditorial() != null &&
+                                libro.getEditorial().toLowerCase().equalsIgnoreCase(busqueda);
+                    }
+
+                    return libro.getTitulo() != null &&
+                            libro.getTitulo().toLowerCase().equalsIgnoreCase(busqueda);
+                })
+                .toList();
+
+        listaLibrosView.cargarLibros(filtrados);
     }
 
     private void reservarLibro(LibroFila libro) {

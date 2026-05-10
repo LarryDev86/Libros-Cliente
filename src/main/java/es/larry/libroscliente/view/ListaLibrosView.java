@@ -3,6 +3,7 @@ package es.larry.libroscliente.view;
 import es.larry.libroscliente.dto.HistorialLibrosUser;
 import es.larry.libroscliente.dto.LibroFila;
 import es.larry.libroscliente.utils.UIUtils;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -14,6 +15,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +24,16 @@ import java.util.function.Consumer;
 public class ListaLibrosView {
 
     private List<HistorialLibrosUser> listaActiva = new ArrayList<>();
+
     private VBox root;
     private Stage stage;
-
+    private Button volverBtn;
     private Label lblTitulo;
+
+    private TextField txtFiltro;
+    private ComboBox<String> cbFiltro;
+    private Button btnLimpiarFiltro;
+
     private TableView<LibroFila> tablaLibros;
     private TableColumn<LibroFila, Integer> colId;
     private TableColumn<LibroFila, String> colTitulo;
@@ -45,9 +53,20 @@ public class ListaLibrosView {
         crearTitulo();
         crearTablaVacia();
 
+        volverBtn = new Button("⬅");
+        volverBtn.getStyleClass().add("boton-volver");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox topBar = new HBox(volverBtn, spacer);
+        topBar.setAlignment(Pos.CENTER_LEFT);
+        topBar.setPadding(new Insets(10, 0, 10, 10));
+
         root.getChildren().addAll(
-                crearTopBar(),
+                topBar,
                 lblTitulo,
+                crearBarraFiltro(),
                 tablaLibros
         );
 
@@ -61,6 +80,25 @@ public class ListaLibrosView {
         UIUtils.setAppIcon(stage);
         stage.setScene(scene);
     }
+
+    private HBox crearBarraFiltro() {
+        cbFiltro = new ComboBox<>();
+        cbFiltro.setItems(FXCollections.observableArrayList("Título", "Autor", "Editorial"));
+        cbFiltro.setValue("Título");
+
+        txtFiltro = new TextField();
+        txtFiltro.setPromptText("Buscar libro...");
+        txtFiltro.setPrefWidth(300);
+
+        btnLimpiarFiltro = new Button("Limpiar");
+
+        HBox barraFiltro = new HBox(10, cbFiltro, txtFiltro, btnLimpiarFiltro);
+        barraFiltro.setAlignment(Pos.CENTER_LEFT);
+        barraFiltro.setPadding(new Insets(5, 0, 10, 10));
+
+        return barraFiltro;
+    }
+
     private boolean esLibroActivoDelUsuario(int idLibro) {
         if (listaActiva == null || listaActiva.isEmpty()) {
             return false;
@@ -71,16 +109,8 @@ public class ListaLibrosView {
                 return true;
             }
         }
+
         return false;
-    }
-
-    private HBox crearTopBar() {
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        HBox topBar = new HBox(spacer);
-        topBar.setAlignment(Pos.CENTER);
-        return topBar;
     }
 
     private void crearTitulo() {
@@ -131,20 +161,30 @@ public class ListaLibrosView {
             }
         });
 
+        tablaLibros.getColumns().addAll(
+                colId,
+                colTitulo,
+                colAutor,
+                colEditorial,
+                colEstado
+        );
+    }
+
+    public void configurarClicksLibros(boolean esAdmin) {
         tablaLibros.setRowFactory(tv -> {
             TableRow<LibroFila> row = new TableRow<>();
 
-            row.setOnMouseClicked(event -> {
-                if (!row.isEmpty() && event.getClickCount() == 1) {
-                    LibroFila libro = row.getItem();
-                    mostrarDialogoLibro(libro);
-                }
-            });
+            if (!esAdmin) {
+                row.setOnMouseClicked(event -> {
+                    if (!row.isEmpty() && event.getClickCount() == 1) {
+                        LibroFila libro = row.getItem();
+                        mostrarDialogoLibro(libro);
+                    }
+                });
+            }
 
             return row;
         });
-
-        tablaLibros.getColumns().addAll(colId, colTitulo, colAutor, colEditorial, colEstado);
     }
 
     public void cargarLibros(List<LibroFila> listaLibros) {
@@ -193,9 +233,11 @@ public class ListaLibrosView {
         if (botonReservar != null) {
             alert.getButtonTypes().add(botonReservar);
         }
+
         if (botonListaEspera != null) {
             alert.getButtonTypes().add(botonListaEspera);
         }
+
         if (botonDevolver != null) {
             alert.getButtonTypes().add(botonDevolver);
         }
@@ -222,6 +264,7 @@ public class ListaLibrosView {
             }
         }
     }
+
     public void mostrarMensajeInfo(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initOwner(stage);
@@ -231,6 +274,7 @@ public class ListaLibrosView {
         alert.setGraphic(null);
         alert.showAndWait();
     }
+
     public void mostrarMensajeReserva(LibroFila libro) {
         Alert confirmacion = new Alert(Alert.AlertType.INFORMATION);
         confirmacion.initOwner(stage);
@@ -269,6 +313,22 @@ public class ListaLibrosView {
         alert.setContentText(mensaje);
         alert.setGraphic(null);
         alert.showAndWait();
+    }
+
+    public Button getVolverBtn() {
+        return volverBtn;
+    }
+
+    public TextField getTxtFiltro() {
+        return txtFiltro;
+    }
+
+    public ComboBox<String> getCbFiltro() {
+        return cbFiltro;
+    }
+
+    public Button getBtnLimpiarFiltro() {
+        return btnLimpiarFiltro;
     }
 
     public void setOnReservar(Consumer<LibroFila> onReservar) {

@@ -1,5 +1,8 @@
 package es.larry.libroscliente.utils;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.json.JSONObject;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -33,5 +36,12 @@ public class JwtUtils {
 
         byte[] decodedBytes = Base64.getUrlDecoder().decode(header);
         return new String(decodedBytes, StandardCharsets.UTF_8);
+    }
+
+    //Extraemos el rol
+    public static String getRole(String token){
+        String payload = decodePayload(token);
+        JSONObject json = new JSONObject(payload);
+        return json.getString("role");
     }
 }
