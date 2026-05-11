@@ -10,6 +10,7 @@ public class Usuario {
     private String nombreCompleto;
     private String email;
     private int puntos;
+    private String role;
     private int preguntesEncertades;
     private String estado;
     private String ultimoAcceso;
@@ -27,11 +28,26 @@ public class Usuario {
             int preguntesEncertades,
             String estado,
             String ultimoAcceso
+
     ) {
         this.id = id;
         this.usuario = usuario;
         this.nombreCompleto = nombreCompleto;
         this.email = email;
+        this.puntos = puntos;
+        this.preguntesEncertades = preguntesEncertades;
+        this.estado = estado;
+        this.ultimoAcceso = ultimoAcceso;
+    }
+
+    public Usuario(int id, String usuario, String nombreCompleto,
+                   String email, String role, int puntos, int preguntesEncertades,
+                   String estado, String ultimoAcceso) {
+        this.id = id;
+        this.usuario = usuario;
+        this.nombreCompleto = nombreCompleto;
+        this.email = email;
+        this.role = role;
         this.puntos = puntos;
         this.preguntesEncertades = preguntesEncertades;
         this.estado = estado;
@@ -63,6 +79,10 @@ public class Usuario {
 
     public String getNombreCompleto() {
         return nombreCompleto;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     public String getEmail() {

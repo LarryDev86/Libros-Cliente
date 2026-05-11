@@ -14,20 +14,25 @@ import java.util.List;
 public class RankingController {
 
     private RankingView rankingView;
+    private List<Usuario> listaUsers;
 
-    public RankingController(RankingView rankingView) {
+    public RankingController(RankingView rankingView, List<Usuario> lista) {
         this.rankingView = rankingView;
+        this.listaUsers = lista;
         initiEvent();
+        rankingView.getVolverBtn().setOnAction(e -> {
+            rankingView.getStage().close();
+        });
     }
 
     private void initiEvent(){
         //Aqui tendremos que consultar la BBDD para extraer TODOS los usuarios y coger puntos y nombre
         List<Ranking> lRanking = new ArrayList<>();
-        List<Usuario> listaUser = List.of(
-                //new Usuario("Sandra","Martin marques","sandra@listilla.com",5)
-
-        );
-
+        for (Usuario usu  : listaUsers) {
+            if(!usu.getRole().equalsIgnoreCase("ADMIN")){
+                lRanking.add(new Ranking(usu.getUsuario(),usu.getPuntos()));
+            }
+        }
         //lRanking.sort((a,b) -> b.getPuntos() - a.getPuntos());
         rankingView.cargarTabla(lRanking);
         rankingView.show();

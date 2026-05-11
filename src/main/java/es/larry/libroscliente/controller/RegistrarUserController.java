@@ -30,10 +30,10 @@ public class RegistrarUserController {
 
     private void nuevoRegistro(){
         //Con esto crearemos un nuevo usuario
-        String usuario = registrarUserView.getTxtUsuer().getText();
-        String nombreCompleto = registrarUserView.getTxtNombreCompleto().getText();
-        String email = registrarUserView.getTxtEmail().getText();
-        String password = registrarUserView.getTxtPassword().getText();
+        String usuario = registrarUserView.getTxtUsuer().getText().trim();
+        String nombreCompleto = registrarUserView.getTxtNombreCompleto().getText().trim();
+        String email = registrarUserView.getTxtEmail().getText().trim();
+        String password = registrarUserView.getTxtPassword().getText().trim();
 
         try {
             String token = service.registroUSer(usuario,nombreCompleto,email,password);

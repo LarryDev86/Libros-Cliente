@@ -120,6 +120,10 @@ public class AuthHttpClient {
                     request,
                     HttpResponse.BodyHandlers.ofString()
             );
+
+            System.out.println("Status registro: " + response.statusCode());
+            System.out.println("Body registro: " + response.body());
+
             if (response.statusCode() == 200) {
                 ResponseDto responseDto =
                         mapper.readValue(response.body(), ResponseDto.class);

@@ -20,6 +20,7 @@ public class AdminView {
     private MenuItem menuListarLibro;
     private MenuItem menuEliminarUser;
     private MenuItem menuRestablecerPassword;
+    private MenuItem menuRanking;
     private MenuItem menuCrearUser;
     private MenuItem menuLogOut;
     private Stage stage;
@@ -39,6 +40,7 @@ public class AdminView {
         menuEliminarLibro = new MenuItem("Eliminar libro");
         menuListarLibro = new MenuItem("Listar libro");
         menuEliminarUser = new MenuItem("Eliminar user");
+        menuRanking = new MenuItem("Ranking de puntos");
         menuCrearUser = new MenuItem("Crear Usuario");
         menuRestablecerPassword = new MenuItem("Restablecer password");
         menuLogOut = new MenuItem("LogOut");
@@ -51,6 +53,7 @@ public class AdminView {
                 menuListarLibro,
                 menuInsertaLibro,
                 menuEliminarLibro,
+                menuRanking,
                 menuLogOut
         );
         HBox topBar = new HBox(mbMenu);
@@ -69,6 +72,10 @@ public class AdminView {
 
     public void setRol() {
         mbMenu.setText("ADMIN");
+    }
+
+    public MenuItem getMenuRanking() {
+        return menuRanking;
     }
 
     public VBox getRoot() {

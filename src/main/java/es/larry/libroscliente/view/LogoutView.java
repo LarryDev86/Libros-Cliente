@@ -15,7 +15,6 @@ public class LogoutView {
     private VBox root;
     private MenuButton mbMenu;
     private MenuItem menuModificar;
-    private MenuItem menuRanking;
     private MenuItem menuListarLibros;
     private MenuItem menuDatosUser;
     private MenuItem menuLogOut;
@@ -32,14 +31,12 @@ public class LogoutView {
         mbMenu.setPrefHeight(24);
         menuModificar = new MenuItem("Modificar");
         menuListarLibros = new MenuItem("Listar Libros");
-        menuRanking = new MenuItem("Ranking");
         menuDatosUser = new MenuItem("Datos User");
         menuLogOut = new MenuItem("LogOut");
         // Añadir items al botón
         mbMenu.getItems().addAll(
                 menuModificar,
                 menuListarLibros,
-                menuRanking,
                 menuDatosUser,
                 menuLogOut
         );
@@ -68,10 +65,6 @@ public class LogoutView {
 
     public MenuItem getMenuModificar() {
         return menuModificar;
-    }
-
-    public MenuItem getMenuRanking() {
-        return menuRanking;
     }
 
     public MenuItem getMenuListarLibros() {

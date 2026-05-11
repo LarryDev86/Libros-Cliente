@@ -6,6 +6,7 @@ import es.larry.libroscliente.utils.UIUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -23,6 +24,7 @@ public class RankingView {
     private VBox root;
     private Stage stage;
     private Label lblTitulo;
+    private Button volverBtn;
     private TableView<Ranking> tablaRanking;
     private TableColumn<Ranking, String> colNomUser;
     private TableColumn<Ranking, Integer> colPuntosUser;
@@ -34,25 +36,25 @@ public class RankingView {
         root.getStyleClass().add("fondo");
         crearTitulo();
         crearTablaVacia();
+        volverBtn = new Button("⬅");
+        volverBtn.getStyleClass().add("boton-volver");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        HBox topBar = new HBox(volverBtn, spacer);
+        topBar.setAlignment(Pos.CENTER_LEFT);
+        topBar.setPadding(new Insets(10, 0, 10, 10));
+
         root.getChildren().addAll(
-                crearTopBar(),
+                topBar,
                 lblTitulo,
                 tablaRanking
         );
-        VBox.setVgrow(tablaRanking, Priority.ALWAYS);
         stage = new Stage();
         Scene scene = new Scene(root, 900, 600);
         UIUtils.applyMainStyle(scene);
         UIUtils.setStyleTablaLibros(scene);
         UIUtils.setAppIcon(stage);
         stage.setScene(scene);
-    }
-    private HBox crearTopBar() {
-        Region spacer = new Region();
-        javafx.scene.layout.HBox.setHgrow(spacer, Priority.ALWAYS);
-        HBox topBar = new HBox(spacer);
-        topBar.setAlignment(Pos.CENTER);
-        return topBar;
     }
 
     private void crearTitulo() {
@@ -77,10 +79,23 @@ public class RankingView {
     public void cargarTabla(List<Ranking> lRanking){
         tablaRanking.getItems().clear();
         tablaRanking.getItems().addAll(lRanking);
+        // Altura por fila
+        double alturaFila = 28;
+        // Altura cabecera
+        double alturaCabecera = 30;
+        // Ajustar altura total
+        tablaRanking.setFixedCellSize(alturaFila);
+        tablaRanking.setPrefHeight(
+                (lRanking.size() * alturaFila) + alturaCabecera + 2
+        );
     }
 
     public void show(){
         stage.show();
+    }
+
+    public Button getVolverBtn() {
+        return volverBtn;
     }
 
     public VBox getRoot() {

@@ -28,6 +28,7 @@ public class AdminController {
         adminView.getMenuEliminarUser().setOnAction(e -> EliminiarUser());
         adminView.getMenuCrearUser().setOnAction(e -> crearUser());
         adminView.getMenuRestablecerPassword().setOnAction(e -> restablecerPassword());
+        adminView.getMenuRanking().setOnAction( e -> ranking());
         adminView.getMenuLogOut().setOnAction(e -> logout());
     }
 
@@ -35,6 +36,12 @@ public class AdminController {
         adminView.getStage().close();
         Sesion.cleanToken();
         homeView.show();
+    }
+
+    private void ranking(){
+        RankingView rk = new RankingView();
+        new RankingController(rk,loginService.listarUsuariosAdmin());
+        rk.show();
     }
     private void listarLibro(){
         LogoutController lg = new LogoutController();
@@ -48,7 +55,6 @@ public class AdminController {
     private void listarUsers() {
         try {
             List<Usuario> usuarios = loginService.listarUsuariosAdmin();
-
             ListarUserView listarUserView = new ListarUserView();
             listarUserView.cargarUsuarios(usuarios);
             listarUserView.show();
