@@ -65,6 +65,7 @@ Autor
   - Listar todos los libros.
   - Insertar nuevos libros.
   - Eliminar libros.
+  - Tabla ranking puntos usuarios.
 
 ### Mejoras en el listado de libros
 - Se ha añadido un sistema de filtrado dinámico por:
